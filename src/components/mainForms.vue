@@ -29,22 +29,42 @@
           color="basil"
           flat
         >
-          <v-card-text>{{ text }}</v-card-text>
+          <v-card-text v-for="todo in todoList" :key="todo"><b>Task: </b>{{todo.name}} <br>
+          <b>Date:</b> {{todo.date}} <br>
+          <b>Status:</b> <span v-if="todo.status=='Done'"  style="color: green; ">{{todo.status}}</span> <span v-if="todo.status=='ND'"  style="color: red; ">{{todo.status}}</span> <br>
+          </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
 
+
 <script>
+
+import Vue from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+Vue.use(VueAxios,axios)
+
   export default {
     name: 'mainForms',
+    mounted(){
+        Vue.axios.get('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/')
+        .then((resp)=>{
+
+          this.todoList = resp.data;
+            console.warn(resp.data);
+        })
+    },
 
     data ()  {
       return {
+        todoList: Array,
         tab: null,
         items: [
-          'Appetizers', 'Entrees', 'Deserts', 'Cocktails',
+          'View all todos', 'Create',
         ],
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       }
