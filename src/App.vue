@@ -33,5 +33,10 @@ export default {
   }),
 };
 </script>
-
+<style scoped>
+.v-window__container {
+   
+    height: 400px!important;
+}
+</style>
 

@@ -1,5 +1,5 @@
   <template>
-  <v-card color="basil" style="width:50%">
+  <v-card  color="basil" style="width:50%;">
     <v-card-title class="text-center justify-center py-6">
       <h2 class="font-weight-bold text-h3 basil--text">
         What would you like to do?
@@ -11,17 +11,28 @@
       background-color="transparent"
       color="basil"
       grow
+      style="height:300px!important;"
     >
       <v-tab>
         View all todos
       </v-tab>
  
 
-      <v-tab-item>
-          <v-card-text v-for="todo in todoList" :key="todo"><b>Task: </b>{{todo.name}} <br>
+      <v-tab-item style="overflow-y:scroll; overflow-x: hidden; /* Hide vertical scrollbar */">
+
+        <v-row>
+          <v-col>
+          <v-card-text height="300px" v-for="todo in todoList" :key="todo"><b>Task: </b>{{todo.name}} <br>
           <b>Date:</b> {{todo.date}} <br>
           <b>Status:</b> <span v-if="todo.status=='Done'"  style="color: green; ">{{todo.status}}</span> <span v-if="todo.status=='ND'"  style="color: red; ">{{todo.status}}</span> <br>
           </v-card-text>
+          </v-col>
+        <v-col>
+        <v-card-text v-for="todo in todoList" :key="todo"> <br>
+          <v-btn color="red" @click="deleteTodo(todo.id)"><v-icon>mdi-delete-empty-outline</v-icon></v-btn>
+          </v-card-text>
+        </v-col>
+        </v-row>
       </v-tab-item>
 
 
@@ -87,6 +98,9 @@ Vue.use(VueAxios,axios)
           this.todoList = resp.data;
             console.warn(resp.data);
         })
+        .catch((err)=>{
+          console.error(err);
+        })
     },
 
     methods:{
@@ -103,11 +117,41 @@ Vue.use(VueAxios,axios)
                   console.warn("Post successfull");
                   console.warn(resp);
               })
+    location.reload()
 
             e.preventDefault();
+          
+        },
+
+
+        deleteTodo(e){
+          Vue.axios.delete('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+e)
+          .then((resp)=>{
+
+              console.warn("Delete successfull");
+              console.warn(resp);
+          })
+
+           location.reload()
         }
 
     }
   }
    
 </script>
+<style scoped>
+.v-btn:not(.v-btn--round).v-size--default {
+
+    margin-top: 10px!important;
+
+} 
+
+div.v-window__container {
+   
+    height: 300px!important;
+}
+.col{
+  height: 400px!important;
+}
+
+</style>
