@@ -85,12 +85,18 @@ Vue.use(VueAxios,axios)
           date:null,
           status:null
         },
+         update:{
+          id:null,
+          name:null,
+          date:null,
+          status:null
+        },
         items: [
           'View all todos', 'Create',
         ],
       }
     },
-
+      //READ
        mounted(){
         Vue.axios.get('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/')
         .then((resp)=>{
@@ -104,7 +110,7 @@ Vue.use(VueAxios,axios)
     },
 
     methods:{
-
+        //CREATE
         createTodo(e) {
               var temp = this.todoList.slice(-1)[0];
               var newID = parseInt(temp.id)+1;
@@ -123,12 +129,23 @@ Vue.use(VueAxios,axios)
           
         },
 
-
+        //DELETE
         deleteTodo(e){
           Vue.axios.delete('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+e)
           .then((resp)=>{
 
               console.warn("Delete successfull");
+              console.warn(resp);
+          })
+
+           location.reload()
+        },
+        //UPDATE
+        updateTodo(e){
+          Vue.axios.put('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+e)
+          .then((resp)=>{
+
+              console.warn("Update successfull");
               console.warn(resp);
           })
 
@@ -152,6 +169,15 @@ div.v-window__container {
 }
 .col{
   height: 400px!important;
+}
+
+@media only screen and (max-width: 600px) {
+  .v-card{
+    width: 100%!important;
+  }
+ .v-application .text-h3 {
+    font-size: 30px!important;
+ }
 }
 
 </style>
