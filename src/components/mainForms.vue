@@ -27,9 +27,12 @@
           <b>Status:</b> <span v-if="todo.status=='Done'"  style="color: green; ">{{todo.status}}</span> <span v-if="todo.status=='ND'"  style="color: red; ">{{todo.status}}</span> <br>
           </v-card-text>
           </v-col>
-        <v-col>
-        <v-card-text v-for="todo in todoList" :key="todo"> <br>
-          <v-btn color="red" @click="deleteTodo(todo.id)"><v-icon>mdi-delete-empty-outline</v-icon></v-btn>
+          <v-col>
+        <v-card-text v-for="todo in todoList" :key="todo">
+
+          <v-btn elevation="50" x-small color="green" @click="getCurrentVals(todo.id)" v-bind="attrs" v-on="on"><v-icon>mdi-check</v-icon></v-btn><br>
+
+          <v-btn elevation="2" x-small color="red" @click="deleteTodo(todo.id)"><v-icon>mdi-delete-empty-outline</v-icon></v-btn>
           </v-card-text>
         </v-col>
         </v-row>
@@ -76,8 +79,12 @@ Vue.use(VueAxios,axios)
 
     data ()  {
       return {
+              dialog: false,
+
         //get all
         todoList: Array,
+        //update todoList
+        updateLits: Array,
         //create
         create:{
           id:null,
@@ -85,15 +92,18 @@ Vue.use(VueAxios,axios)
           date:null,
           status:null
         },
-         update:{
+        //update
+         currentTodo:{
           id:null,
           name:null,
           date:null,
-          status:null
-        },
+          status:null       
+           },
         items: [
           'View all todos', 'Create',
         ],
+        componentKey: 0,
+
       }
     },
       //READ
@@ -106,10 +116,24 @@ Vue.use(VueAxios,axios)
         })
         .catch((err)=>{
           console.error(err);
-        })
+        });
+
+        
     },
 
     methods:{
+      //READ BY ID
+      getTodoId(e){
+          Vue.axios.get('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+e)
+          .then((resp)=>{ 
+
+              this.updateList = resp.data;
+                console.warn("Get by ID successfull");
+                console.warn(resp);
+
+            })            
+          },
+
         //CREATE
         createTodo(e) {
               var temp = this.todoList.slice(-1)[0];
@@ -117,7 +141,7 @@ Vue.use(VueAxios,axios)
 
               this.create.id = newID;
               
-              Vue.axios.post('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/create/', this.create)
+              Vue.axios.post('https://todoapisurajsharmaappservice.azurewebsites.net/create/', this.create)
               .then((resp)=>{
 
                   console.warn("Post successfull");
@@ -138,19 +162,45 @@ Vue.use(VueAxios,axios)
               console.warn(resp);
           })
 
-           location.reload()
+           location.reload();
         },
         //UPDATE
-        updateTodo(e){
-          Vue.axios.put('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+e)
-          .then((resp)=>{
-
-              console.warn("Update successfull");
-              console.warn(resp);
+        updateTodo(t){
+          Vue.axios.put('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+t,{
+            
+           id: this.currentTodo.id,
+           name: this.currentTodo.name,
+           date: this.currentTodo.date,
+            status: "Done"
           })
+          .then((resp)=>{
+                        
+                console.warn("Update successfull");
+                console.warn(resp);
 
-           location.reload()
-        }
+                location.reload();
+            })          
+
+        },  
+
+         //UPDATE
+        getCurrentVals(t){
+
+          Vue.axios.get('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/'+t)
+          .then((resp)=>{
+                        
+              this.currentTodo.id = resp.data[0].id;
+              this.currentTodo.name = resp.data[0].name; 
+              this.currentTodo.date = resp.data[0].date;
+              this.currentTodo.status = resp.data[0].status;
+
+                console.warn("get by id succesfull");
+                            this.updateTodo(t);
+
+            })          
+
+
+        }, 
 
     }
   }
@@ -178,6 +228,11 @@ div.v-window__container {
  .v-application .text-h3 {
     font-size: 30px!important;
  }
+}
+.v-btn{
+  min-width: 0px!important;
+    width: 62px!important;
+    height: 32px!important;
 }
 
 </style>
