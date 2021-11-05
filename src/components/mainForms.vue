@@ -2,7 +2,7 @@
   <v-card  color="basil" style="width:50%;">
     <v-card-title class="text-center justify-center py-6">
       <h2 class="font-weight-bold text-h3 basil--text">
-        What would you like to do?
+        Heres what you need to get done
       </h2>
     </v-card-title>
 
@@ -215,10 +215,10 @@ Vue.use(VueAxios,axios)
 
 div.v-window__container {
    
-    height: 300px!important;
+    height: 400px!important;
 }
 .col{
-  height: 400px!important;
+  height: 500px!important;
 }
 
 @media only screen and (max-width: 600px) {
@@ -232,7 +232,7 @@ div.v-window__container {
 .v-btn{
   min-width: 0px!important;
     width: 62px!important;
-    height: 32px!important;
+    height: 40px!important;
 }
 
 </style>
