@@ -160,9 +160,10 @@ Vue.use(VueAxios,axios)
 
               console.warn("Delete successfull");
               console.warn(resp);
+              location.reload();
+
           })
 
-           location.reload();
         },
         //UPDATE
         updateTodo(t){
