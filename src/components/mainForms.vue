@@ -45,18 +45,15 @@
       <v-tab-item>
         <br>
           <v-form @submit="createTodo" method="post">
-            <v-col>
-            <v-text-field type="text" name="taskTodo" v-model="create.name" label="Task title" hint="Enter name of the task you need to complete" required="required" persistent-hint></v-text-field>
-            <v-text-field type="text" name="taskDate" v-model="create.date" label="Enter date" hint="Enter date of completion i.e. Monday, Tonight, 2pm..." required="required" persistent-hint></v-text-field>
-            <v-text-field type="text" name="taskStatus" v-model="create.status" label="Enter staus" hint="Enter completion status either 'Done or ND (Not Done)" required="required" persistent-hint></v-text-field>
+            <v-text-field type="text" name="taskTodo" v-model="create.name" label="Task title" hint="Enter name of the task you need to complete" persistent-hint></v-text-field>
+            <v-text-field type="text" name="taskDate" v-model="create.date" label="Enter date" hint="Enter date of completion i.e. Monday, Tonight, 2pm..."  persistent-hint></v-text-field>
+            <v-text-field type="text" name="taskStatus" v-model="create.status" label="Enter staus" hint="Enter completion status either 'Done or ND (Not Done)"  persistent-hint></v-text-field>
              <v-btn
       color="success"
       type="submit"
     >
       submit
     </v-btn>
-                </v-col>
-
           </v-form>
       </v-tab-item>
 
@@ -135,29 +132,20 @@ Vue.use(VueAxios,axios)
           },
 
         //CREATE
-        createTodo(e) {
+      createTodo(e) {
               var temp = this.todoList.slice(-1)[0];
               var newID = parseInt(temp.id)+1;
-
               this.create.id = newID;
-
-              if(this.create.name == null || this.create.date == null || this.create.status == null){
-                alert("Please fill all the fields");
-              }
-              else{
               
-              Vue.axios.post('https://todoapisurajsharmaappservice.azurewebsites.net/create/', this.create)
+              Vue.axios.post('https://todoapisurajsharmaappservice.azurewebsites.net/api/todos/create/', this.create)
               .then((resp)=>{
-
                   console.warn("Post successfull");
                   console.warn(resp);
                       location.reload()
 
               })
-              }
-
             e.preventDefault();
-              
+          
         },
 
         //DELETE
