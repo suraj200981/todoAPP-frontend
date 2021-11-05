@@ -226,7 +226,7 @@ div.v-window__container {
     width: 100%!important;
   }
  .v-application .text-h3 {
-    font-size: 30px!important;
+    font-size: 25px!important;
  }
 }
 .v-btn{
