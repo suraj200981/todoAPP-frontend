@@ -45,18 +45,18 @@
       <v-tab-item>
         <br>
           <v-form @submit="createTodo" method="post">
-            <h4>Enter task:</h4>
-            <v-text-field type="text" name="taskTodo" v-model="create.name"></v-text-field>
-            <h4>Enter date:</h4>
-            <v-text-field type="text" name="taskDate" v-model="create.date"></v-text-field>
-            <h4>Status:</h4>
-            <v-text-field type="text" name="taskStatus" v-model="create.status"></v-text-field>
+            <v-col>
+            <v-text-field type="text" name="taskTodo" v-model="create.name" label="Task title" hint="Enter name of the task you need to complete" required="required" persistent-hint></v-text-field>
+            <v-text-field type="text" name="taskDate" v-model="create.date" label="Enter date" hint="Enter date of completion i.e. Monday, Tonight, 2pm..." required="required" persistent-hint></v-text-field>
+            <v-text-field type="text" name="taskStatus" v-model="create.status" label="Enter staus" hint="Enter completion status either 'Done or ND (Not Done)" required="required" persistent-hint></v-text-field>
              <v-btn
       color="success"
       type="submit"
     >
-      Create todo
+      submit
     </v-btn>
+                </v-col>
+
           </v-form>
       </v-tab-item>
 
@@ -140,17 +140,24 @@ Vue.use(VueAxios,axios)
               var newID = parseInt(temp.id)+1;
 
               this.create.id = newID;
+
+              if(this.create.name == null || this.create.date == null || this.create.status == null){
+                alert("Please fill all the fields");
+              }
+              else{
               
               Vue.axios.post('https://todoapisurajsharmaappservice.azurewebsites.net/create/', this.create)
               .then((resp)=>{
 
                   console.warn("Post successfull");
                   console.warn(resp);
+                      location.reload()
+
               })
-    location.reload()
+              }
 
             e.preventDefault();
-          
+              
         },
 
         //DELETE
